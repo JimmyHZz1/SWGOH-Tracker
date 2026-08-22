@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SWGOH Tracker">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>SWGOH Tracker</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#101828;--muted:#667085;--line:#e4e7ec;--accent:#2563eb;--danger:#dc2626}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
+header{padding:calc(env(safe-area-inset-top) + 18px) 18px 14px;background:#0b1020;color:#fff;position:sticky;top:0;z-index:5}
+h1{font-size:28px;margin:0 0 3px}header p{margin:0;color:#b9c2d0;font-size:14px}
+main{padding:14px 14px 100px;max-width:760px;margin:auto}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px;margin-bottom:12px;box-shadow:0 2px 10px #00000008}
+.stat{font-size:25px;font-weight:750}.label{font-size:12px;color:var(--muted);margin-top:3px}
+section{margin:18px 0}.sectionhead{display:flex;justify-content:space-between;align-items:center;margin:0 2px 9px}
+h2{font-size:18px;margin:0}.btn{border:0;border-radius:11px;padding:9px 12px;background:var(--accent);color:#fff;font-weight:650}
+.btn.secondary{background:#eef2ff;color:#1d4ed8}.btn.danger{background:#fee2e2;color:#b91c1c}
+.row{display:flex;gap:12px;align-items:center}.grow{flex:1}.name{font-weight:650}.meta{font-size:12px;color:var(--muted);margin-top:3px}
+progress{width:100%;height:8px;appearance:none}progress::-webkit-progress-bar{background:#edf0f5;border-radius:8px}progress::-webkit-progress-value{background:var(--accent);border-radius:8px}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;padding:8px 8px calc(env(safe-area-inset-bottom) + 8px);z-index:10}
+nav button{flex:1;border:0;background:none;color:#667085;padding:7px 3px;font-size:11px}nav button.active{color:var(--accent);font-weight:700}
+nav span{display:block;font-size:20px;margin-bottom:2px}
+input,textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;background:#fff}
+.formrow{display:grid;grid-template-columns:1fr 1fr;gap:9px}.hidden{display:none}.pill{background:#eef2ff;color:#1d4ed8;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:650}
+.item{padding:13px 0;border-bottom:1px solid var(--line)}.item:last-child{border-bottom:0}
+.actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.empty{text-align:center;color:var(--muted);padding:30px 10px}
+</style>
+</head>
+<body>
+<header><h1>SWGOH Tracker</h1><p>Personal edition · data stays on this device</p></header>
+<main id="app"></main>
+<nav>
+<button data-tab="dashboard" class="active"><span>▦</span>Dashboard</button>
+<button data-tab="characters"><span>♟</span>Characters</button>
+<button data-tab="resources"><span>◈</span>Resources</button>
+<button data-tab="settings"><span>⚙</span>Settings</button>
+</nav>
+<script>
+const KEY="swgoh-tracker-v1";
+let state=JSON.parse(localStorage.getItem(KEY)||"null")||{
+characters:[
+{name:"Supreme Leader Kylo Ren",gear:13,relic:7,target:9,notes:""},
+{name:"Ahsoka Tano",gear:13,relic:5,target:7,notes:""},
+{name:"Echo",gear:13,relic:6,target:6,notes:""},
+{name:"Moff Tarkin",gear:13,relic:7,target:7,notes:""},
+{name:"Count Dooku",gear:13,relic:1,target:5,notes:""}],
+resources:[
+{name:"Crystals",amount:0,target:5000},{name:"Credits",amount:0,target:10000000},
+{name:"Kyrotech",amount:0,target:400},{name:"Signal Data",amount:0,target:300},
+{name:"Carbonite Circuit Boards",amount:0,target:100},{name:"Bronzium Wiring",amount:0,target:100}]
+};
+let tab="dashboard";
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function pct(x){return Math.max(0,Math.min(100,x*100))}
+function charProg(c){return c.target?Math.min(1,(c.relic||0)/c.target):0}
+function render(){
+ const app=document.querySelector("#app");
+ app.innerHTML=tab==="dashboard"?dashboard():tab==="characters"?characters():tab==="resources"?resources():settings();
+ document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
+ bind();
+}
+function dashboard(){
+ const avg=state.characters.length?state.characters.reduce((a,c)=>a+charProg(c),0)/state.characters.length:0;
+ const chars=[...state.characters].sort((a,b)=>charProg(a)-charProg(b)).slice(0,5);
+ return `<section><div class="grid">
+ <div class="card"><div class="stat">${Math.round(avg*100)}%</div><div class="label">Character progress</div></div>
+ <div class="card"><div class="stat">${state.characters.length}</div><div class="label">Characters tracked</div></div>
+ </div></section>
+ <section><div class="sectionhead"><h2>Priority Characters</h2><button class="btn secondary" id="gotoChars">Manage</button></div>
+ <div class="card">${chars.length?chars.map(charCard).join(""):`<div class="empty">Add characters to start tracking.</div>`}</div></section>
+ <section><div class="sectionhead"><h2>Resources</h2><button class="btn secondary" id="gotoRes">Manage</button></div>
+ <div class="card">${state.resources.slice(0,4).map(resourceCard).join("")}</div></section>`;
+}
+function charCard(c,i){
+ return `<div class="item"><div class="row"><div class="grow"><div class="name">${esc(c.name)}</div><div class="meta">Current R${c.relic} · Target R${c.target}</div></div><span class="pill">${Math.round(charProg(c)*100)}%</span></div><progress max="100" value="${pct(charProg(c))}"></progress></div>`;
+}
+function characters(){
+ return `<section><div class="sectionhead"><h2>Characters</h2><button class="btn" id="addChar">+ Add</button></div>
+ <div class="card">${state.characters.length?state.characters.map((c,i)=>`
+ <div class="item">
+ <div class="row"><div class="grow"><div class="name">${esc(c.name)}</div><div class="meta">Gear ${c.gear} · R${c.relic} → R${c.target}</div></div></div>
+ <progress max="100" value="${pct(charProg(c))}"></progress>
+ <div class="actions"><button class="btn secondary editChar" data-i="${i}">Edit</button><button class="btn danger delChar" data-i="${i}">Delete</button></div>
+ </div>`).join(""):`<div class="empty">No characters yet.</div>`}</div></section>`;
+}
+function resources(){
+ return `<section><div class="sectionhead"><h2>Resources</h2><button class="btn" id="addRes">+ Add</button></div>
+ <div class="card">${state.resources.length?state.resources.map((r,i)=>`
+ <div class="item"><div class="row"><div class="grow"><div class="name">${esc(r.name)}</div><div class="meta">${r.amount.toLocaleString()} / ${r.target.toLocaleString()}</div></div></div>
+ <progress max="100" value="${pct(r.target?r.amount/r.target:0)}"></progress>
+ <div class="actions"><button class="btn secondary editRes" data-i="${i}">Edit</button><button class="btn danger delRes" data-i="${i}">Delete</button></div></div>`).join(""):`<div class="empty">No resources yet.</div>`}</div></section>`;
+}
+function settings(){
+ return `<section><div class="card"><h2>Data</h2><p class="meta">Everything is saved in this browser on this iPhone.</p>
+ <div class="actions"><button class="btn secondary" id="export">Export backup</button><button class="btn secondary" id="import">Import backup</button><button class="btn danger" id="reset">Reset demo data</button></div>
+ <input id="file" type="file" accept=".json,application/json" class="hidden"></div>
+ <div class="card"><h2>About</h2><p class="meta">SWGOH Tracker · Personal PWA v0.2</p></div></section>`;
+}
+function editChar(i){
+ const c=state.characters[i], name=prompt("Character name",c.name); if(name===null)return;
+ const gear=Number(prompt("Gear level (1-13)",c.gear)); if(!Number.isFinite(gear))return;
+ const relic=Number(prompt("Current relic (0-10)",c.relic)); if(!Number.isFinite(relic))return;
+ const target=Number(prompt("Target relic (1-10)",c.target)); if(!Number.isFinite(target))return;
+ const notes=prompt("Notes",c.notes||""); if(notes===null)return;
+ state.characters[i]={...c,name,gear:Math.max(1,Math.min(13,gear)),relic:Math.max(0,Math.min(10,relic)),target:Math.max(1,Math.min(10,target)),notes};save();render();
+}
+function editRes(i){
+ const r=state.resources[i], name=prompt("Resource name",r.name);if(name===null)return;
+ const amount=Number(prompt("Current amount",r.amount));if(!Number.isFinite(amount))return;
+ const target=Number(prompt("Target amount",r.target));if(!Number.isFinite(target))return;
+ state.resources[i]={...r,name,amount:Math.max(0,amount),target:Math.max(1,target)};save();render();
+}
+function bind(){
+ document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render()});
+ document.querySelector("#gotoChars")?.addEventListener("click",()=>{tab="characters";render()});
+ document.querySelector("#gotoRes")?.addEventListener("click",()=>{tab="resources";render()});
+ document.querySelector("#addChar")?.addEventListener("click",()=>{state.characters.push({name:"New Character",gear:1,relic:0,target:5,notes:""});save();render();editChar(state.characters.length-1)});
+ document.querySelectorAll(".editChar").forEach(b=>b.onclick=()=>editChar(+b.dataset.i));
+ document.querySelectorAll(".delChar").forEach(b=>b.onclick=()=>{if(confirm("Delete this character?")){state.characters.splice(+b.dataset.i,1);save();render()}});
+ document.querySelector("#addRes")?.addEventListener("click",()=>{state.resources.push({name:"New Resource",amount:0,target:100});save();render();editRes(state.resources.length-1)});
+ document.querySelectorAll(".editRes").forEach(b=>b.onclick=()=>editRes(+b.dataset.i));
+ document.querySelectorAll(".delRes").forEach(b=>b.onclick=()=>{if(confirm("Delete this resource?")){state.resources.splice(+b.dataset.i,1);save();render()}});
+ document.querySelector("#reset")?.addEventListener("click",()=>{if(confirm("Reset all tracker data?")){localStorage.removeItem(KEY);location.reload()}});
+ document.querySelector("#export")?.addEventListener("click",()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:"application/json"}));a.download="swgoh-tracker-backup.json";a.click()});
+ document.querySelector("#import")?.addEventListener("click",()=>document.querySelector("#file").click());
+ document.querySelector("#file")?.addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;try{state=JSON.parse(await f.text());save();render();alert("Backup imported.")}catch{alert("That backup file is not valid.")}});
+}
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+render();
+</script>
+</body></html>
