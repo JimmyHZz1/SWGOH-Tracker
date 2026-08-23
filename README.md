@@ -1,7 +1,7 @@
-SWGOH Tracker PWA v0.4
+# SWGOH Tracker v0.6
 
-Replace the files in the ROOT of the existing GitHub Pages repository.
+Feature-focused iOS PWA build. Open via HTTPS/GitHub Pages and add to iPhone Home Screen.
 
-Features: fixed navigation/buttons, local data, Ally Code account screen, experimental live SWGOH API sync, backup export, offline PWA cache.
+Includes: persistent GP/Crystals header, roster cache, sync history, journey tracker with pinning/filtering/sorting, automatic/manual priorities, GAC counters/notes, local resources, JSON backup, and offline shell.
 
-After replacing files, open the GitHub Pages URL in Safari and refresh. If an old Home Screen copy is installed, delete it, open the URL in Safari, refresh, then Add to Home Screen again.
+Live API requests remain subject to the API provider's availability/CORS rules.
