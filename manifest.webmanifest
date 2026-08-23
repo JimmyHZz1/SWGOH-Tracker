@@ -1,13 +1,1 @@
-{
-  "name":"SWGOH Tracker",
-  "short_name":"SWGOH Tracker",
-  "start_url":".",
-  "display":"standalone",
-  "background_color":"#f5f7fb",
-  "theme_color":"#0b1020",
-  "description":"Personal Star Wars Galaxy of Heroes resource and character tracker.",
-  "icons":[
-    {"src":"icon-180.png","sizes":"180x180","type":"image/png"},
-    {"src":"icon-512.png","sizes":"512x512","type":"image/png"}
-  ]
-}
+{"name":"SWGOH Tracker","short_name":"SWGOH Tracker","start_url":"./","display":"standalone","background_color":"#f4f6fa","theme_color":"#0b1020","icons":[{"src":"./icon-180.png","sizes":"180x180","type":"image/png"},{"src":"./icon-512.png","sizes":"512x512","type":"image/png"}]}

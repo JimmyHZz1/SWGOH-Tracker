@@ -1,20 +1,7 @@
-# SWGOH Tracker PWA v0.2
+SWGOH Tracker PWA v0.4
 
-A private, installable iPhone PWA based on the v0.1 prototype.
+Replace the files in the ROOT of the existing GitHub Pages repository.
 
-## Features
-- iPhone-friendly standalone UI
-- Dashboard
-- Character gear/relic/target tracking
-- Resource tracking
-- Local offline storage
-- Export/import JSON backups
-- Service-worker offline cache
-- Home Screen web-app support
+Features: fixed navigation/buttons, local data, Ally Code account screen, experimental live SWGOH API sync, backup export, offline PWA cache.
 
-## Deploy
-Upload the contents of this folder to any HTTPS static host. Then open the site in Safari on iPhone and choose:
-Share -> Add to Home Screen -> Open as Web App -> Add.
-
-## Important
-A PWA must be served over HTTPS (except local development) for service-worker/offline behavior.
+After replacing files, open the GitHub Pages URL in Safari and refresh. If an old Home Screen copy is installed, delete it, open the URL in Safari, refresh, then Add to Home Screen again.
