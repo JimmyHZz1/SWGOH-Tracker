@@ -1,22 +1,30 @@
-# SWGOH Tracker v0.5
+# SWGOH Tracker PWA v0.5
 
-Major feature-frozen build based on the supplied v0.4 project, with the v0.2 project retained as the historical baseline.
+Corrected feature-complete v0.5 build.
 
 ## Included
-- Redesigned dashboard with persistent GP/Crystals header and v0.5 label
+- Persistent title/version/GP/crystals header
 - Rolling What's New banner
-- Journey Progress widget
-- Conquest widget with progress, tickets and manual fallback/countdown placeholder
+- Dashboard Journey Progress and Conquest widgets
 - Square navigation tiles
-- GL/Solo Journey/Characters/Resources/GAC/Events/Teams sections
-- Multi-user-ready Ally Code sync architecture
-- Local cache, export/reset and last-sync state
-- Version History for v0.2, v0.4 and v0.5 (v0.3 omitted because it was never built)
-- Repository-editable Upcoming Features JSON
-- Backend proxy for self-hosted SWGOH Comlink
-- v0.6 placeholder for authorised private-inventory integration
+- GL and Solo Journey sections
+- Completed journeys moved to bottom by default
+- Progress sorting and multiple manual pins
+- My Priorities with manual overrides
+- Conquest Planner, ticket tracking and static threshold fallback
+- GAC counter catalogue foundation
+- Events/watchlist foundation
+- Resources/manual tracking foundation
+- Team Builder
+- Global Search
+- Progress/sync history
+- Version History (v0.2, v0.4, v0.5; no v0.3)
+- Repository-editable Upcoming Features
+- Multi-user-ready backend boundary
+- Service-worker cache version bump to v0.5.1
 
-## Important
-The frontend no longer calls SWGOH data services directly. To make Ally Code sync live over the internet, deploy the backend and a self-hosted Comlink instance, then set `config.js` `API_BASE` to the backend URL. Do not put private Comlink/HMAC secrets in the PWA.
+## Sync
+The PWA sends Ally Code requests to `config.js` -> `/api/sync`.
+Deploy the backend in `backend/` and point `API_BASE` at its public HTTPS URL.
 
-The v0.5 resource page deliberately does not claim access to private inventory. That work is planned for v0.6.
+Private inventory authentication is intentionally reserved for v0.6.

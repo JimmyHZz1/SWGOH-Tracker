@@ -1,5 +1,11 @@
 {
-  "ticketFallback": true,
-  "rewardThresholds": [2000,4000,6000,8000,10000],
-  "note": "Replace/expand with verified current Conquest reward thresholds when publishing the game-data release."
+  "rewardTickets": [
+    0,
+    2000,
+    4000,
+    6000,
+    8000,
+    10000
+  ],
+  "note": "Versioned static fallback thresholds; update in repository when game data changes."
 }
