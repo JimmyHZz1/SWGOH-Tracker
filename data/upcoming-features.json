@@ -1,0 +1,6 @@
+[
+  {"title":"Private inventory integration","status":"Planned for v0.6","description":"Investigate an authorised account-data route for live gear/material inventory."},
+  {"title":"Advanced Conquest analytics","status":"Planned","description":"More detailed feat optimisation and session recommendations."},
+  {"title":"Guild tools","status":"Planned","description":"Shared guild utilities and planning tools."},
+  {"title":"GAC opponent scouting","status":"Planned","description":"Expanded opponent analysis and battle preparation."}
+]
