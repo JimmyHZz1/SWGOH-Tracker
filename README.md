@@ -1,30 +1,21 @@
-# SWGOH Tracker PWA v0.5
+# SWGOH Tracker v0.5.2
 
-Corrected feature-complete v0.5 build.
+Functional v0.5.2 working build based on the current repository structure.
 
-## Included
-- Persistent title/version/GP/crystals header
-- Rolling What's New banner
-- Dashboard Journey Progress and Conquest widgets
-- Square navigation tiles
-- GL and Solo Journey sections
-- Completed journeys moved to bottom by default
-- Progress sorting and multiple manual pins
-- My Priorities with manual overrides
-- Conquest Planner, ticket tracking and static threshold fallback
-- GAC counter catalogue foundation
-- Events/watchlist foundation
-- Resources/manual tracking foundation
-- Team Builder
-- Global Search
-- Progress/sync history
-- Version History (v0.2, v0.4, v0.5; no v0.3)
-- Repository-editable Upcoming Features
-- Multi-user-ready backend boundary
-- Service-worker cache version bump to v0.5.1
+## Changes
+- Ally Code save + Sync Now wired to backend.
+- Public SWGOH.GG profile sync boundary; no private credentials.
+- Local roster cache and sync history.
+- GL/Solo journey screens consume synced roster data.
+- Dashboard bottom navigation is hidden while on Dashboard.
+- News is a continuously scrolling ticker.
+- Upcoming Features renders `data/upcoming-features.json`.
+- Version History uses icon-led bullet points.
+- Existing dashboard, Conquest, GAC, Events, Resources and Team foundations retained.
 
-## Sync
-The PWA sends Ally Code requests to `config.js` -> `/api/sync`.
-Deploy the backend in `backend/` and point `API_BASE` at its public HTTPS URL.
+## Backend
+The backend is deliberately isolated in `backend/main.py`. It fetches the public SWGOH.GG player profile and normalises the returned data.
 
-Private inventory authentication is intentionally reserved for v0.6.
+Deploy the backend to an HTTPS host, then set `API_BASE` in `config.js` to the backend URL plus `/api` if your host routes it that way.
+
+This v0.5.2 build does NOT claim to synchronise private inventory. That remains provider-dependent.
