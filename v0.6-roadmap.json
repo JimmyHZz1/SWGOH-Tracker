@@ -1,0 +1,25 @@
+{
+  "version": "v0.6",
+  "gac": {
+    "source": "AhnaldT101",
+    "url": "https://ahnaldt101.com/swgoh/teams",
+    "mode": "roster-aware",
+    "features": [
+      "5v5 team data",
+      "offense and defense information",
+      "counter recommendations",
+      "character availability checks",
+      "requirements metadata",
+      "basic GAC planning"
+    ]
+  },
+  "conquest": {
+    "mode": "roster-based foundation",
+    "inventoryAware": false
+  },
+  "inventory": {
+    "provider": "Lyutils",
+    "status": "pending-approved-integration",
+    "enabled": false
+  }
+}

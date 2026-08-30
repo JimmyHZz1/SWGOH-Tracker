@@ -1,0 +1,3 @@
+window.SWGOH_CONFIG = {
+  API_BASE: "https://REPLACE-WITH-YOUR-RENDER-URL"
+};
