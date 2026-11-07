@@ -16,12 +16,12 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-APP_VERSION = "0.5.1"
+APP_VERSION = "0.6"
 SWGOH_GG_BASE = os.getenv("SWGOH_GG_BASE", "https://swgoh.gg").rstrip("/")
 REQUEST_TIMEOUT = float(os.getenv("REQUEST_TIMEOUT", "25"))
 USER_AGENT = os.getenv(
     "SWGOH_GG_USER_AGENT",
-    "Mozilla/5.0 (compatible; SWGOH-Tracker/0.5.1; public profile sync)",
+    "Mozilla/5.0 (compatible; SWGOH-Tracker/0.6; public profile sync)",
 )
 
 DEFAULT_ORIGINS = [
