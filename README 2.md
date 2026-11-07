@@ -1,27 +1,33 @@
-# SWGOH Tracker v0.5.1
+# SWGOH Tracker v0.6
 
-v0.5.1 is a maintenance and backend-fix release. It does not introduce the planned v0.6 feature set.
+v0.6 introduces the Render-hosted Python backend foundation for roster synchronisation. This is a major backend/system change; it is not yet a completed or validated roster-sync release.
 
-## Fixes and improvements
-- Prepared a dedicated Python backend for deployment on Render.
-- Added a Render Blueprint configuration and deployment instructions.
-- Added health-check endpoints for deployment diagnostics.
-- Aligned the API to accept both `/sync` and `/api/sync` routes.
-- Improved public SWGOH.GG profile and roster sync error handling.
-- Configured CORS for the GitHub Pages frontend.
-- Ensured sync failures return readable JSON messages rather than raw HTML or backend tracebacks.
-- Documented the legacy backend to reduce the risk of deploying the wrong implementation.
-- Kept the backend stateless; the PWA retains its local roster cache.
+## What changed
+- Added a separately hosted FastAPI backend deployed on Render.
+- Added Render Blueprint configuration, Frankfurt region deployment and health-check routing.
+- Added API health endpoints and aligned both `/sync` and `/api/sync` routes.
+- Added CORS configuration for the GitHub Pages frontend.
+- Kept the backend stateless; the PWA continues to retain its local roster cache.
+- Improved API error handling so failures return readable JSON rather than raw upstream HTML or backend tracebacks.
+- Updated the application and backend version identifiers to v0.6.
+
+## Deployment status
+- Render service: deployed at https://swgoh-tracker-api.onrender.com
+- Health check: verified at `/api/health`, returning `ok: true` and version `0.5.1` at the time of the initial deployment.
+- The v0.6 version update is being prepared on the `render-backend-fix` branch and requires a subsequent Render redeploy before the live service reports v0.6.
+
+## Current blocker
+A real Ally Code sync currently receives HTTP 403 from SWGOH.GG when the backend requests the character-roster page. The user's normal SWGOH.GG profile page loads in a browser, so automated access is being refused separately. An SWGOH.GG API application request has been submitted and is awaiting a decision. Do not claim roster or GP sync is working until a successful live test confirms it.
+
+If API access is approved, credentials must be stored as Render environment variables/secrets, never committed to the repository or embedded in the PWA.
 
 ## Scope and limitations
-- Sync uses public SWGOH.GG profile and roster pages.
-- Private inventory, unequipped materials and crystal balances are not provided by this public sync.
-- The Render service has been prepared, but a live deployment and real-profile parser validation are still required.
+- Current integration attempt uses public SWGOH.GG profile and roster pages.
+- Public profile data does not provide private inventory, unequipped materials or crystal balances.
+- Multi-user Ally Code support and end-to-end PWA sync must be validated after the upstream access issue is resolved.
 
-## Deployment
-Deploy the `render-backend-fix` branch to Render using `render.yaml`. After Render creates the service, set the service URL in `config.js` and test `/api/health` before attempting an Ally Code sync.
-
-The main branch and live GitHub Pages app are not changed by this maintenance branch.
-
-## Future release
-The planned v0.6 feature work remains separate from this maintenance release.
+## Deployment and release safety
+- Render is configured from the `render-backend-fix` branch.
+- The GitHub `main` branch and live GitHub Pages app have not been changed.
+- Do not merge or publish without explicit approval.
+- The planned v0.6 feature roadmap (including expanded GAC and Conquest tools) should be scheduled separately from completing and validating the backend foundation.
