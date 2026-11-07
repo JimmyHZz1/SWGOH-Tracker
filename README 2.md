@@ -1,37 +1,27 @@
-# SWGOH Tracker v0.6
+# SWGOH Tracker v0.5.1
 
-Functional v0.6 working build based on the current repository structure.
+v0.5.1 is a maintenance and backend-fix release. It does not introduce the planned v0.6 feature set.
 
-## Changes
-- Ally Code save + Sync Now wired to backend.
-- Public SWGOH.GG profile sync boundary; no private credentials.
-- Local roster cache and sync history.
-- GL/Solo journey screens consume synced roster data.
-- Dashboard bottom navigation is hidden while on Dashboard.
-- News is a continuously scrolling ticker.
-- Upcoming Features renders `data/upcoming-features.json`.
-- Version History uses icon-led bullet points.
-- Existing dashboard, Conquest, GAC, Events, Resources and Team foundations retained.
+## Fixes and improvements
+- Prepared a dedicated Python backend for deployment on Render.
+- Added a Render Blueprint configuration and deployment instructions.
+- Added health-check endpoints for deployment diagnostics.
+- Aligned the API to accept both `/sync` and `/api/sync` routes.
+- Improved public SWGOH.GG profile and roster sync error handling.
+- Configured CORS for the GitHub Pages frontend.
+- Ensured sync failures return readable JSON messages rather than raw HTML or backend tracebacks.
+- Documented the legacy backend to reduce the risk of deploying the wrong implementation.
+- Kept the backend stateless; the PWA retains its local roster cache.
 
-## Backend
-The backend is deliberately isolated in `backend/main.py`. It fetches the public SWGOH.GG player profile and normalises the returned data.
+## Scope and limitations
+- Sync uses public SWGOH.GG profile and roster pages.
+- Private inventory, unequipped materials and crystal balances are not provided by this public sync.
+- The Render service has been prepared, but a live deployment and real-profile parser validation are still required.
 
-Deploy the backend to an HTTPS host, then set `API_BASE` in `config.js` to the backend URL plus `/api` if your host routes it that way.
+## Deployment
+Deploy the `render-backend-fix` branch to Render using `render.yaml`. After Render creates the service, set the service URL in `config.js` and test `/api/health` before attempting an Ally Code sync.
 
-This v0.6 build does NOT claim to synchronise private inventory. That remains provider-dependent.
+The main branch and live GitHub Pages app are not changed by this maintenance branch.
 
-
-## v0.6 scope
-
-v0.6 is the feature release built on the v0.5 foundation.
-
-Included/planned in this foundation:
-- Roster-aware GAC counter architecture using AhnaldT101 as the team/meta source.
-- Basic GAC planning and opponent-analysis foundations.
-- Roster analysis.
-- Advanced Conquest planning foundations that do not require private inventory.
-- A future inventory-provider boundary for Lyutils.
-
-Inventory-dependent calculations remain disabled until an approved Lyutils API/integration is available. The app must not request, capture, or reuse Lyutils passwords, session cookies, auth IDs, or one-time verification codes.
-
-The v0.6.x series will be used for fixes and incremental improvements.
+## Future release
+The planned v0.6 feature work remains separate from this maintenance release.
