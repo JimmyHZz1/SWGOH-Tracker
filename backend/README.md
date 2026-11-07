@@ -1,7 +1,7 @@
-# v0.5 Sync Backend
+# Legacy backend (not used by the Render Blueprint)
 
-POST `/sync` with `{ "allyCode": "337627356" }`.
+This folder contains an earlier backend implementation retained for historical reference.
 
-This backend is a secure boundary between the PWA and a self-hosted Comlink instance. Do not put Comlink/API secrets in the PWA.
+**Do not select this folder as Render's Root Directory.** The active public SWGOH.GG implementation for the `render-backend-fix` branch is the repository-root `main.py`, deployed using the root `requirements.txt` and `render.yaml`.
 
-Set `COMLINK_URL` to your Comlink service. Add authentication in the deployment environment if your Comlink instance is protected.
+The legacy implementation expects a different upstream service and is not part of the current public-profile sync plan.
