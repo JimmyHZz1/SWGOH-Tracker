@@ -29,7 +29,7 @@ input,select,textarea{width:100%;padding:11px;border:1px solid #d0d5dd;border-ra
 <script src="./config.js"></script>
 <script>
 (()=>{'use strict';
-const KEY='swgoh-tracker-v052', APP_VERSION='0.5.2';
+const KEY='swgoh-tracker-v052', APP_VERSION='0.6';
 const defaults={allyCode:'',profile:null,roster:[],lastSync:'',syncHistory:[],crystals:null,tab:'dashboard',pins:[],priorityOverrides:{},resources:{},events:[],savedTeams:[],conquest:{active:false,progress:0,tickets:0,nextTickets:2000,sector:'—',featsDone:0,featsTotal:0,nextStart:''}};
 let state=load(),tab=state.tab||'dashboard';
 const nav=[['dashboard','▦','Dashboard'],['gl','★','GL'],['conquest','🎯','Conquest'],['gac','⚔','GAC'],['settings','⚙','Settings']];
@@ -76,6 +76,8 @@ settings(){return `<div class="card"><h2>Account & Sync</h2><label>Ally Code</la
 };
 function journeyPage(title,desc,type){let l=sorted(type);return `<div class="sectionHead"><h2>${title}</h2><button class="btn secondary" data-page="priorities">Priorities</button></div><div class="card"><div class="small">${desc}</div></div><div class="card">${l.map((j,i)=>`<details class="item" ${i===0?'open':''}><summary><span class="row"><span class="grow">${j.pinned?'📌 ':''}<span class="name">${esc(j.name)}</span><span class="pill">${j.progress}%</span></span></summary><div class="small">${j.roster?'Found in synced roster.':'Not currently identified in synced roster.'}</div><div class="bar"><i style="width:${j.progress}%"></i></div><div class="actions"><button class="btn secondary" data-pin="${j.id}">${j.pinned?'Unpin':'Pin'}</button><button class="btn secondary" data-page="resources">View resource needs</button></div></details>`).join('')}</div>`}
 function versionHistory(){return[
+{v:'v0.6',icon:'🛠️',items:['Prepared a dedicated Python backend for deployment on Render','Added Render Blueprint configuration and deployment instructions','Added API health-check endpoints for deployment diagnostics','Improved public SWGOH.GG profile and character-roster sync handling','Added friendly sync errors for network failures, unexpected HTML responses and upstream errors','Configured CORS for the GitHub Pages app origin','Documented the legacy backend so it is not selected accidentally','Kept the service stateless; the app retains its own local roster cache','Public profile sync only — private inventory and crystals are not retrieved','Backend and deployment configuration are prepared on a separate branch; live deployment and real-profile parser validation remain pending']},
+
 {v:'v0.5.2',icon:'🔄',items:['Functional SWGOH.GG public roster sync boundary','Working Ally Code save and Sync Now','GL/Solo pages consume synced roster data','Upcoming Features JSON is rendered automatically','Dashboard bottom navigation is hidden on Dashboard','News ticker continuously scrolls','Version History converted to icon-led bullet points']},
 {v:'v0.5',icon:'🚀',items:['Dashboard redesign and persistent GP/Crystals header','Journey Progress, Conquest, GAC, Events, Resources and Priorities foundations','Square navigation tiles','Repository-editable Upcoming Features']},
 {v:'v0.4',icon:'🛠️',items:['PWA foundation, navigation and Ally Code account screen','Experimental backend sync boundary and local data']},
