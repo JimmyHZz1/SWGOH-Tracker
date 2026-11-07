@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b1020"><meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" href="./icon-180.png">
-<title>SWGOH Tracker v0.5.1</title>
+<title>SWGOH Tracker v0.6</title>
 <style>
 :root{--bg:#f4f6fa;--card:#fff;--ink:#101828;--muted:#667085;--line:#e4e7ec;--nav:#0b1020;--accent:#2563eb;--good:#15803d;--warn:#b45309;--danger:#b91c1c}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -24,12 +24,12 @@ input,select,textarea{width:100%;padding:11px;border:1px solid #d0d5dd;border-ra
 @media(max-width:520px){.grid{gap:9px}.tile{min-height:92px;font-size:13px}.three{grid-template-columns:1fr}.two{grid-template-columns:1fr 1fr}}
 </style></head>
 <body>
-<header><div class="top"><div class="brand"><h1>SWGOH Tracker</h1><div class="version">v0.5.1</div></div><div class="accountStats"><div>GP <b id="gp">—</b></div><div>💎 <b id="crystals">—</b></div></div></div><div class="news" id="news"></div></header>
+<header><div class="top"><div class="brand"><h1>SWGOH Tracker</h1><div class="version">v0.6</div></div><div class="accountStats"><div>GP <b id="gp">—</b></div><div>💎 <b id="crystals">—</b></div></div></div><div class="news" id="news"></div></header>
 <main class="main" id="app"></main><div class="nav" id="nav"></div>
 <script src="./config.js"></script>
 <script>
 (()=>{'use strict';
-const KEY='swgoh-tracker-v052', APP_VERSION='0.5.1';
+const KEY='swgoh-tracker-v052', APP_VERSION='0.6';
 const defaults={allyCode:'',profile:null,roster:[],lastSync:'',syncHistory:[],crystals:null,tab:'dashboard',pins:[],priorityOverrides:{},resources:{},events:[],savedTeams:[],conquest:{active:false,progress:0,tickets:0,nextTickets:2000,sector:'—',featsDone:0,featsTotal:0,nextStart:''}};
 let state=load(),tab=state.tab||'dashboard';
 const nav=[['dashboard','▦','Dashboard'],['gl','★','GL'],['conquest','🎯','Conquest'],['gac','⚔','GAC'],['settings','⚙','Settings']];
@@ -38,7 +38,7 @@ const journeys=[
 {id:'aphra',name:'Doctor Aphra',type:'Solo'},{id:'executor',name:'Executor',type:'Solo'},{id:'profundity',name:'Profundity',type:'Solo'},{id:'raddus',name:'Raddus',type:'Solo'}
 ];
 const gacCounters=[['Jabba the Hutt','Leia Organa'],['Lord Vader','Jedi Master Kenobi'],['Supreme Leader Kylo Ren','Jabba the Hutt'],['Rey','Supreme Leader Kylo Ren'],['General Skywalker','Darth Revan'],['Executor','Profundity'],['Profundity','Executor']];
-const news=['🆕 v0.5.2 — Functional sync and UI fixes','🔄 Ally Code sync now uses SWGOH.GG public data','🎯 Conquest Planner and ticket tracking','📌 Pinned Journey Progress and manual priorities','⚙️ Settings and repository-editable roadmap'];
+const news=['🆕 v0.6 — Render-hosted backend foundation','☁️ Python API deployed and health check verified','🔐 SWGOH.GG API application request submitted','🔄 Roster sync validation in progress','📌 Existing tracker features and local roster cache retained'];
 function load(){try{return {...defaults,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){return {...defaults}}}
 function save(){state.tab=tab;localStorage.setItem(KEY,JSON.stringify(state))}
 function esc(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -76,8 +76,7 @@ settings(){return `<div class="card"><h2>Account & Sync</h2><label>Ally Code</la
 };
 function journeyPage(title,desc,type){let l=sorted(type);return `<div class="sectionHead"><h2>${title}</h2><button class="btn secondary" data-page="priorities">Priorities</button></div><div class="card"><div class="small">${desc}</div></div><div class="card">${l.map((j,i)=>`<details class="item" ${i===0?'open':''}><summary><span class="row"><span class="grow">${j.pinned?'📌 ':''}<span class="name">${esc(j.name)}</span><span class="pill">${j.progress}%</span></span></summary><div class="small">${j.roster?'Found in synced roster.':'Not currently identified in synced roster.'}</div><div class="bar"><i style="width:${j.progress}%"></i></div><div class="actions"><button class="btn secondary" data-pin="${j.id}">${j.pinned?'Unpin':'Pin'}</button><button class="btn secondary" data-page="resources">View resource needs</button></div></details>`).join('')}</div>`}
 function versionHistory(){return[
-{v:'v0.5.1',icon:'🛠️',items:['Fix: prepared a dedicated Python backend for deployment on Render','Fix: added Render Blueprint configuration and deployment instructions','Fix: added API health-check endpoints for deployment diagnostics','Fix: aligned backend routes to support both /sync and /api/sync','Fix: improved public SWGOH.GG profile and character-roster sync error handling','Fix: configured CORS for the GitHub Pages app origin','Fix: return readable JSON errors instead of exposing upstream HTML or backend tracebacks','Fix: documented the legacy backend to prevent accidental deployment','Improvement: retained local roster caching in the PWA; backend remains stateless','Limitation: public profile sync only — private inventory and crystals are not retrieved','Validation: live Render deployment and real-profile parser testing remain outstanding; changes are prepared on the render-backend-fix branch only']},
-
+{v:'v0.6',icon:'☁️',items:['Major change: introduced a separately hosted Python backend on Render; the GitHub Pages app remains a static frontend','Deployment: Render Blueprint created from the render-backend-fix branch; service deployed in Frankfurt','Diagnostics: /api/health endpoint deployed and verified successfully; backend reports version 0.6','Integration: backend currently targets public SWGOH.GG profile and character-roster data','Access: SWGOH.GG API application request submitted; approval and credentials are pending','Known issue: live roster sync currently receives HTTP 403 from the SWGOH.GG character-roster page; successful GP and roster retrieval is not yet validated','Next: implement approved API access if granted, configure credentials securely in Render environment variables, then retest GP and roster sync','Limitations: public profile access does not provide private inventory, unequipped materials or crystal balances','Safety: changes remain on the render-backend-fix branch; main and the live GitHub Pages app have not been changed']},
 
 {v:'v0.5',icon:'🚀',items:['Dashboard redesign and persistent GP/Crystals header','Journey Progress, Conquest, GAC, Events, Resources and Priorities foundations','Square navigation tiles','Repository-editable Upcoming Features']},
 {v:'v0.4',icon:'🛠️',items:['PWA foundation, navigation and Ally Code account screen','Experimental backend sync boundary and local data']},
